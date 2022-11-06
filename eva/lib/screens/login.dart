@@ -10,6 +10,8 @@ class LoginScreen extends StatefulWidget {
 class _MyLoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: const Text("This is the login screen"),
+    );
   }
 }
