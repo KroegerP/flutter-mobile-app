@@ -79,6 +79,13 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        actions: [
+          IconButton(
+              onPressed: _incrementCounter,
+              icon: const Icon(Icons.notifications)),
+          IconButton(
+              onPressed: _incrementCounter, icon: const Icon(Icons.settings))
+        ],
       ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -103,21 +110,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: <Widget>[
-        Container(
-          color: Colors.red,
-          alignment: Alignment.center,
-          child: const ReportsScreen(),
-        ),
-        Container(
-          color: Colors.green,
-          alignment: Alignment.center,
-          child: const HomeScreen(),
-        ),
-        Container(
-          color: Colors.blue,
-          alignment: Alignment.center,
-          child: const AlertsScreen(),
-        ),
+        const ReportsScreen(),
+        const HomeScreen(),
+        const AlertsScreen(),
       ][currentPageIndex],
     );
   }
