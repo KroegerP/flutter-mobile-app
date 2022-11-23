@@ -7,7 +7,7 @@
 
 ## Prereqs
 
-In order to run and install and run EVAA, you'll need to first [install-flutter]().
+In order to run and install and run EVAA, you'll need to first [install-flutter](https://docs.flutter.dev/get-started/install).
 
 ## Running
 
