@@ -1,3 +1,5 @@
+import 'package:eva/main.dart';
+import 'package:eva/screens/reports.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -40,14 +42,13 @@ class _MyHomeScreenState extends State<HomeScreen> {
           const Text("NAME has NOT taken QUANTITY of their medications"),
           const Text("NUMBER are high priority medications"),
           TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.all(16.0),
+                textStyle: const TextStyle(fontSize: 14),
+              ),
               onPressed: _goToReportsPage,
-              child: const Text(
-                "View Detailed Reports",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              )),
-          Checkbox(
-              value: false,
-              onChanged: ((value) => debugPrint(value.toString())))
+              child: const Text("Click here to view detailed reports")),
         ],
       ),
     );
