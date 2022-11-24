@@ -1,3 +1,4 @@
+import 'package:eva/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:eva/screens/home.dart';
 import 'package:eva/screens/alerts.dart';
@@ -27,7 +28,15 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.red,
       ),
-      home: const MyHomePage(title: 'Elderly Virtual Assistant'),
+      // home: const MyHomePage(title: 'Elderly Virtual Assistant'),
+      routes: <String, WidgetBuilder>{
+        '/': (BuildContext context) {
+          return const LoginScreen();
+        },
+        '/home': (BuildContext context) {
+          return const MyHomePage(title: 'Elderly Virtual Assistant');
+        }
+      },
     );
   }
 }

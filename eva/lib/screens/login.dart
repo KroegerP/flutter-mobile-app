@@ -1,3 +1,4 @@
+import 'package:eva/main.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -8,10 +9,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _MyLoginScreenState extends State<LoginScreen> {
+  _goToHomeScreen() {
+    Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Text("This is the login screen"),
+    return Column(
+      children: <Widget>[
+        const Text("This is the login screen"),
+        TextButton(onPressed: _goToHomeScreen, child: const Text("LOGIN"))
+      ],
     );
   }
 }
