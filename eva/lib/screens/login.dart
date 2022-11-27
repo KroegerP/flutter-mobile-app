@@ -51,13 +51,15 @@ class _MyLoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       const Text("LOGIN SCREEN"),
-                      const Text("Username"),
+                      const Text("Email"),
                       TextFormField(
                         decoration:
                             const InputDecoration(hintText: "Enter your email"),
                         validator: (String? value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a valid username';
+                          if (value == null ||
+                              value.isEmpty ||
+                              !value.contains('@')) {
+                            return 'Please enter a valid email';
                           }
                           return null;
                         },
