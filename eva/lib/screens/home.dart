@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 class _MyHomeScreenState extends State<HomeScreen> {
   void _goToReportsPage() {
     debugPrint("Sending to reports page!");
+    Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
   }
 
   @override

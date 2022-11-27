@@ -31,7 +31,9 @@ class MyApp extends StatelessWidget {
       // home: const MyHomePage(title: 'Elderly Virtual Assistant'),
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) {
-          return const LoginScreen();
+          return const LoginScreen(
+            title: 'Elderly Virtual Assistant',
+          );
         },
         '/home': (BuildContext context) {
           return const MyHomePage(title: 'Elderly Virtual Assistant');
