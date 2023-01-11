@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:eva/main.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +11,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _MyLoginScreenState extends State<LoginScreen> {
+  String _buttonText = "Login";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int _counter = 0;
+
   _goToHomeScreen() {
     if (_formKey.currentState!.validate()) {
+      _buttonText == "Hello" ? _buttonText = "Goodbye" : _buttonText = "Hello";
       // Process data.
       Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
     }
@@ -44,14 +45,32 @@ class _MyLoginScreenState extends State<LoginScreen> {
         body: Form(
             key: _formKey,
             child: Padding(
-                padding: const EdgeInsets.only(left: 100, right: 100),
+                padding: const EdgeInsets.only(left: 50, right: 50),
                 child: Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      const Text("LOGIN SCREEN"),
-                      const Text("Email"),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 48.0, bottom: 24.0),
+                        child: Image(
+                            image: AssetImage('assets/evaFace4HomeRed.png')),
+                      ),
+                      const Text.rich(TextSpan(
+                          text: "EVA Companion App",
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24))),
+                      const Text.rich(TextSpan(
+                          text: "Please Log In",
+                          style: TextStyle(fontSize: 14))),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 24),
+                        child: Text.rich(TextSpan(
+                            text: "Email",
+                            style: TextStyle(fontWeight: FontWeight.bold))),
+                      ),
                       TextFormField(
                         decoration:
                             const InputDecoration(hintText: "Enter your email"),
@@ -64,7 +83,12 @@ class _MyLoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      const Text("Password"),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 24),
+                        child: Text.rich(TextSpan(
+                            text: "Password",
+                            style: TextStyle(fontWeight: FontWeight.bold))),
+                      ),
                       TextFormField(
                         obscureText: true,
                         decoration: const InputDecoration(
@@ -77,10 +101,14 @@ class _MyLoginScreenState extends State<LoginScreen> {
                         },
                       ),
                       Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: TextButton(
-                              onPressed: _goToHomeScreen,
-                              child: const Text("LOGIN")))
+                        padding: const EdgeInsets.symmetric(vertical: 32),
+                        child: ElevatedButton(
+                            onPressed: _goToHomeScreen,
+                            child: Text.rich(TextSpan(text: _buttonText))),
+                      )
+                      //         TextButton(
+                      //             onPressed: _goToHomeScreen,
+                      //             child: const Text("LOGIN")))
                     ],
                   ),
                 ))));
