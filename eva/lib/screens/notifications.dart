@@ -29,6 +29,7 @@ class User {
 
 class _MyNotificationScreenState extends State<NotificationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  List<User> _myData = [];
   int _counter = 0;
   String? filterString;
 
@@ -105,6 +106,9 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
         users.add(user);
       }
     }
+    setState(() {
+      _myData = users;
+    });
     return users;
   }
 
@@ -129,6 +133,7 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
                     // shrinkWrap: true,
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) => Card(
+                      color: Colors.red,
                       clipBehavior: Clip.hardEdge,
                       child: InkWell(
                         splashColor: Colors.blue.withAlpha(30),
@@ -138,36 +143,33 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
                           // debugPrint(index.toString());
                         },
                         child: ListTile(
-                          leading: Transform.translate(
-                            offset: const Offset(8, 0),
-                            child: Container(
-                              height: 32,
-                              width: 32,
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(6)),
+                            minLeadingWidth: 12,
+                            leading: Transform.translate(
+                              offset: const Offset(-8, 0),
+                              child: const Icon(
+                                Icons.info_outline,
                                 color: Colors.white,
                               ),
-                              child: const Icon(Icons.copy),
                             ),
-                          ),
-                          trailing: Container(
-                            height: 32,
-                            width: 32,
-                            decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(6)),
-                              color: Colors.white,
+                            trailing: Transform.translate(
+                                offset: const Offset(16, 0),
+                                child: IconButton(
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.black,
+                                    ),
+                                    onPressed: () =>
+                                        _removeNotification(index))),
+                            // leading: const Icon(Icons.copy_sharp),
+                            title: Transform.translate(
+                              offset: const Offset(-4, 0),
+                              child: Text(
+                                snapshot.data[index].title,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            )
+                            // contentPadding: const EdgeInsets.only(bottom: 20.0),
                             ),
-                            child: IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () => _removeNotification(index)),
-                          ),
-                          // leading: const Icon(Icons.copy_sharp),
-                          title: Text(snapshot.data[index].title),
-                          subtitle: Text(snapshot.data[index].body),
-                          contentPadding: const EdgeInsets.only(bottom: 20.0),
-                        ),
                       ),
                     ),
                   ),
