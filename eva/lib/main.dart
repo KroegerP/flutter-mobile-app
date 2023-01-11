@@ -1,5 +1,6 @@
 import 'package:eva/screens/login.dart';
 import 'package:eva/screens/notifications.dart';
+import 'package:eva/screens/userAppSettings.dart';
 import 'package:flutter/material.dart';
 import 'package:eva/screens/home.dart';
 import 'package:eva/screens/alerts.dart';
@@ -38,6 +39,9 @@ class MyApp extends StatelessWidget {
         },
         '/home': (BuildContext context) {
           return const MyHomePage(title: 'Elderly Virtual Assistant');
+        },
+        '/settings': (BuildContext context) {
+          return const UserSettings();
         }
       },
     );
@@ -65,7 +69,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // '_' means it's only available in the library, see https://dart.dev/guides/language/language-tour#libraries-and-visibility
   int _counter = 0;
-  int currentPageIndex = 1;
+  int _currentPageIndex = 1;
 
   void _incrementCounter() {
     setState(() {
@@ -76,6 +80,15 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  void _goToSettingsPage() {
+    debugPrint("Opening Settings Page!");
+    Navigator.pushNamed(context, '/settings');
+  }
+
+  void _openNotifsTray() {
+    debugPrint("Opening Tray!");
   }
 
   @override
@@ -93,19 +106,19 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         actions: [
           IconButton(
-              onPressed: _incrementCounter,
+              onPressed: _openNotifsTray,
               icon: const Icon(Icons.notifications)),
           IconButton(
-              onPressed: _incrementCounter, icon: const Icon(Icons.settings))
+              onPressed: _goToSettingsPage, icon: const Icon(Icons.settings))
         ],
       ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
-            currentPageIndex = index;
+            _currentPageIndex = index;
           });
         },
-        selectedIndex: currentPageIndex,
+        selectedIndex: _currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.file_copy),
@@ -125,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
         const ReportsScreen(),
         const HomeScreen(),
         const NotificationScreen(),
-      ][currentPageIndex],
+      ][_currentPageIndex],
     );
   }
 }
