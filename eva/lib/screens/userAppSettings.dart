@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AlertsScreen extends StatefulWidget {
-  const AlertsScreen({super.key});
+class UserSettings extends StatefulWidget {
+  const UserSettings({super.key});
 
   @override
-  State<AlertsScreen> createState() => _MyAlertsScreenState();
+  State<UserSettings> createState() => _MyUserSettingsState();
 }
 
-class _MyAlertsScreenState extends State<AlertsScreen> {
+class _MyUserSettingsState extends State<UserSettings> {
   bool _toggleAlerts = false;
   bool _toggleAlerts2 = false;
   String _buttonText = "Hello";
@@ -36,34 +36,50 @@ class _MyAlertsScreenState extends State<AlertsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Title(color: Colors.white, child: const Text("Configure Alerts")),
-        const Text("This is the alerts screen"),
-        const Text("This is the second text box"),
-        Radio<bool>(
-          value: _toggleAlerts,
-          onChanged: (value) {
-            setState(() {
-              _toggleAlerts = value!;
-            });
-          },
-          groupValue: _toggleAlerts,
+    return Scaffold(
+        appBar: AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: const Text("Settings"),
+          actions: [
+            IconButton(
+                onPressed: () => debugPrint("Hi"),
+                icon: const Icon(Icons.notifications)),
+            IconButton(
+                onPressed: () => debugPrint("Hi"),
+                icon: const Icon(Icons.settings))
+          ],
         ),
-        OutlinedButton(
-            onPressed: _toggleAlertsFunction, child: Text(_buttonText)),
-        TextButton(onPressed: _toggleAlertsFunction, child: Text(_buttonText)),
-        ElevatedButton(
-            onPressed: _toggleAlertsFunction, child: Text(_buttonText)),
-        Checkbox(
-            value: _toggleAlerts2,
-            onChanged: (newVal) => _toggleAlertsFunction2(newVal)),
-        Slider(
-            value: _alertFrequncy,
-            min: 1,
-            max: 10,
-            onChanged: (newValues) => _updateAlertFrequency(newValues))
-      ],
-    );
+        backgroundColor: Colors.white,
+        body: Column(
+          children: <Widget>[
+            Title(color: Colors.white, child: const Text("Configure Alerts")),
+            const Text("This is the alerts screen"),
+            const Text("This is the second text box"),
+            Radio<bool>(
+              value: _toggleAlerts,
+              onChanged: (value) {
+                setState(() {
+                  _toggleAlerts = value!;
+                });
+              },
+              groupValue: _toggleAlerts,
+            ),
+            OutlinedButton(
+                onPressed: _toggleAlertsFunction, child: Text(_buttonText)),
+            TextButton(
+                onPressed: _toggleAlertsFunction, child: Text(_buttonText)),
+            ElevatedButton(
+                onPressed: _toggleAlertsFunction, child: Text(_buttonText)),
+            Checkbox(
+                value: _toggleAlerts2,
+                onChanged: (newVal) => _toggleAlertsFunction2(newVal)),
+            Slider(
+                value: _alertFrequncy,
+                min: 1,
+                max: 10,
+                onChanged: (newValues) => _updateAlertFrequency(newValues))
+          ],
+        ));
   }
 }
