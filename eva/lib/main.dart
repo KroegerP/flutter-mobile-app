@@ -1,4 +1,5 @@
 import 'package:eva/screens/login.dart';
+import 'package:eva/screens/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:eva/screens/home.dart';
 import 'package:eva/screens/alerts.dart';
@@ -123,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: <Widget>[
         const ReportsScreen(),
         const HomeScreen(),
-        const AlertsScreen(),
+        const NotificationScreen(),
       ][currentPageIndex],
     );
   }
