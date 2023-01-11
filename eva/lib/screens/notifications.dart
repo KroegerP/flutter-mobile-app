@@ -82,6 +82,29 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
     return users;
   }
 
+  Stream<List<User>> users() async* {
+    debugPrint("Getting data!");
+    String url = "https://jsonplaceholder.typicode.com/posts";
+    final response = await http.get(Uri.parse(url));
+    var responseData = json.decode(response.body);
+    // var responseData = [];
+
+    //Creating a list to store input data;
+    List<User> users = [];
+    for (var singleUser in responseData) {
+      User user = User(
+          id: singleUser["id"],
+          userId: singleUser["userId"],
+          title: singleUser["title"],
+          body: singleUser["body"]);
+
+      //Adding user to the list.
+      if (_matchRegExp(user.title, filterString ?? '')) {
+        users.add(user);
+      }
+    }
+  }
+
   // GET request via http package, what will actually be used
   Future<List<User>> getRequest() async {
     debugPrint("Getting data!");
@@ -106,9 +129,6 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
         users.add(user);
       }
     }
-    setState(() {
-      _myData = users;
-    });
     return users;
   }
 
@@ -118,7 +138,7 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
       backgroundColor: Colors.white,
       body: Column(children: <Widget>[
         FutureBuilder(
-          future: readJson(),
+          future: getRequest(),
           builder: (BuildContext ctx, AsyncSnapshot snapshot) {
             if (snapshot.data == null) {
               return const Center(
@@ -126,13 +146,21 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
               );
             } else {
               return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ListView.builder(
-                    // scrollDirection: Axis.vertical,
-                    // shrinkWrap: true,
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) => Card(
+                  child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView.builder(
+                  // scrollDirection: Axis.vertical,
+                  // shrinkWrap: true,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) => Dismissible(
+                    key: ValueKey<int>(index),
+                    onDismissed: (direction) {
+                      debugPrint("Dismissed $index");
+                      // setState(() {
+                      //   _myData.removeAt(index);
+                      // });
+                    },
+                    child: Card(
                       color: Colors.red,
                       clipBehavior: Clip.hardEdge,
                       child: InkWell(
@@ -174,7 +202,7 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
                     ),
                   ),
                 ),
-              );
+              ));
             }
           },
         ),
