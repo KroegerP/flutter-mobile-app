@@ -91,7 +91,8 @@ class _MyLoginScreenState extends State<LoginScreen> {
                       ),
                       TextFormField(
                         obscureText: true,
-                        decoration: const InputDecoration(hintText: "HI"),
+                        decoration: const InputDecoration(
+                            hintText: "Enter your password"),
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter a valid password';

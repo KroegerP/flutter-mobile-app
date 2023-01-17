@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.red,
       ),
-      // home: const MyHomePage(title: 'Elderly Virtual Assistant'),
+      // home: const Navigation(title: 'Elderly Virtual Assistant'),
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) {
           return const LoginScreen(
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           );
         },
         '/home': (BuildContext context) {
-          return const MyHomePage(title: 'Elderly Virtual Assistant');
+          return const Navigation(title: 'Elderly Virtual Assistant');
         },
         '/settings': (BuildContext context) {
           return const UserSettings();
@@ -48,8 +48,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class Navigation extends StatefulWidget {
+  const Navigation({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -63,10 +63,10 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Navigation> createState() => _NavigationState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _NavigationState extends State<Navigation> {
   // '_' means it's only available in the library, see https://dart.dev/guides/language/language-tour#libraries-and-visibility
   int _counter = 0;
   int _currentPageIndex = 1;
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
+        // Here we take the value from the Navigation object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
         actions: [
