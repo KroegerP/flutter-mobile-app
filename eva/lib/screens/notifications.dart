@@ -363,6 +363,8 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
                       // setState(() {
                       //   _myData.removeAt(index);
                       // });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('$index dismissed')));
                     },
                     child: _TodoCard(
                       todo: snapshot.data,
