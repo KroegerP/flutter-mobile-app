@@ -91,13 +91,22 @@ class _MyLoginScreenState extends State<LoginScreen> {
                       ),
                       TextFormField(
                         obscureText: true,
-                        decoration: const InputDecoration(
-                            hintText: "Enter your password"),
+                        decoration: const InputDecoration(hintText: "HI"),
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter a valid username';
+                            return 'Please enter a valid password';
                           }
                           return null;
+                        },
+                        onFieldSubmitted: (value) {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            //               var result = await auth.sendPasswordResetEmail(_email);
+                            //               print(result);
+                            // print(_email);
+                            Navigator.of(context)
+                                .pushNamedAndRemoveUntil('/home', (_) => false);
+                          }
                         },
                       ),
                       Padding(
