@@ -49,7 +49,7 @@ class _TodoCard extends StatelessWidget {
     return GestureDetector(
         onTap: () {
           debugPrint("$index");
-          debugPrint(todo[0].id.toString());
+          debugPrint(todo[index].id.toString());
           Navigator.of(context).push(
             HeroDialogRoute(
               builder: (context) => Center(
@@ -89,7 +89,10 @@ class _TodoCard extends StatelessWidget {
                             Icons.delete,
                             color: Colors.black,
                           ),
-                          onPressed: () => debugPrint("Clicked!"))),
+                          onPressed: () {
+                            debugPrint("Deleting $index");
+                            todo.removeAt(index);
+                          })),
                   // leading: const Icon(Icons.copy_sharp),
                   title: Transform.translate(
                     offset: const Offset(-4, 0),
