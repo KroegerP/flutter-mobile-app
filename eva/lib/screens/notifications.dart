@@ -122,7 +122,8 @@ class _TodoTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+      style: const TextStyle(
+          fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
     );
   }
 }
@@ -158,7 +159,9 @@ class _TodoPopupCard extends StatelessWidget {
                     height: 8,
                   ),
                   if (todo.body != '') ...[
-                    const Divider(),
+                    const Divider(
+                      color: Colors.white,
+                    ),
                     _TodoItemsBox(items: todo),
                   ],
                 ]),
@@ -185,10 +188,36 @@ class _TodoItemsBox extends StatelessWidget {
 
   final User items;
 
+  void _onPressed() {
+    debugPrint("Close Button!");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [_TodoItemTile(item: items)],
+      children: [
+        _TodoItemTile(item: items),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.black)),
+                onPressed: _onPressed,
+                child: const Text("Close")),
+            ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white)),
+                onPressed: _onPressed,
+                child: const Text(
+                  "Delete",
+                  style: TextStyle(color: Colors.red),
+                ))
+          ],
+        )
+      ],
     );
   }
 }
@@ -219,16 +248,24 @@ class _TodoItemTileState extends State<_TodoItemTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(widget.item.id.toString()),
+      title: Text(
+        widget.item.body,
+        style: const TextStyle(color: Colors.white),
+      ),
     );
   }
 }
 
 class _MyNotificationScreenState extends State<NotificationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  List<User> _myData = [];
+  late Future<List<User>> _myData;
   int _counter = 0;
   String? filterString;
+
+  // @override
+  // void initState() {
+  //   _myData = getRequest();
+  // }
 
   void _incrementCounter() {
     setState(() {
@@ -276,6 +313,9 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
         users.add(user);
       }
     }
+    // setState(() {
+    // _myData = users;
+    // });
     return users;
   }
 
@@ -341,6 +381,19 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
               return const Center(
                 child: CircularProgressIndicator(),
               );
+            } else if (snapshot.data.length == 0) {
+              return Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(32),
+                    child: Image(
+                        image: AssetImage('assets/evaFace4HomeRedSad.png')),
+                  ),
+                  Text("No data to show!")
+                ],
+              ));
             } else {
               return Expanded(
                   child: Padding(
@@ -353,7 +406,6 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
                     direction: DismissDirection.startToEnd,
                     key: ValueKey<int>(index),
                     onDismissed: (direction) {
-                      debugPrint("Dismissed $index to the $direction");
                       if (direction == DismissDirection.endToStart) {
                         Navigator.of(context).push(
                           HeroDialogRoute(
@@ -366,8 +418,10 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
                       // setState(() {
                       //   _myData.removeAt(index);
                       // });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('$index dismissed')));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          duration: const Duration(seconds: 2),
+                          content: Text(
+                              'Deleted $index: ${snapshot.data[index].title}')));
                     },
                     child: _TodoCard(
                       todo: snapshot.data,
