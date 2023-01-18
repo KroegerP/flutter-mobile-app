@@ -146,6 +146,19 @@ class _MyReportsScreenState extends State<ReportsScreen> {
               return const Center(
                 child: CircularProgressIndicator(),
               );
+            } else if (snapshot.data.length == 0) {
+              return Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(32),
+                    child: Image(
+                        image: AssetImage('assets/evaFace4HomeRedSad.png')),
+                  ),
+                  Text("No data to show!")
+                ],
+              ));
             } else {
               return Expanded(
                 child: Padding(
