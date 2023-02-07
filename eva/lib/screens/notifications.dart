@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eva/classes/data_types.dart';
 import 'package:eva/screens/individualReports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,21 +18,6 @@ class NotificationScreen extends StatefulWidget {
 }
 
 //Creating a class user to store the data;
-class User {
-  final int id;
-  final int userId;
-  final String title;
-  final String body;
-
-  bool? completed;
-
-  User(
-      {this.id = 0,
-      this.userId = 0,
-      this.title = '',
-      this.body = '',
-      this.completed = false});
-}
 
 class _NotifCard extends StatelessWidget {
   /// {@macro todo_card}
@@ -41,7 +27,7 @@ class _NotifCard extends StatelessWidget {
     required this.notifList,
   }) : super(key: key);
 
-  final List<User> notifList;
+  final List<AlertType> notifList;
   final int index;
 
   @override
@@ -97,7 +83,7 @@ class _NotifCard extends StatelessWidget {
                   title: Transform.translate(
                     offset: const Offset(-4, 0),
                     child: Text(
-                      notifList[index].title,
+                      notifList[index].medicationName,
                       style: const TextStyle(color: Colors.white),
                     ),
                   )
@@ -112,15 +98,15 @@ class _NotifCard extends StatelessWidget {
 class _NotifTitle extends StatelessWidget {
   const _NotifTitle({
     Key? key,
-    required this.title,
+    required this.medicationName,
   }) : super(key: key);
 
-  final String title;
+  final String medicationName;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      title,
+      medicationName,
       style: const TextStyle(
           fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
     );
@@ -129,7 +115,7 @@ class _NotifTitle extends StatelessWidget {
 
 class _NotifPopupCard extends StatelessWidget {
   const _NotifPopupCard({Key? key, required this.notif}) : super(key: key);
-  final User notif;
+  final AlertType notif;
 
   @override
   Widget build(BuildContext context) {
@@ -148,11 +134,11 @@ class _NotifPopupCard extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  _NotifTitle(title: notif.title),
+                  _NotifTitle(medicationName: notif.medicationName),
                   const SizedBox(
                     height: 8,
                   ),
-                  if (notif.body != '') ...[
+                  if (notif.medicationPriority != '') ...[
                     const Divider(
                       color: Colors.white,
                     ),
@@ -174,7 +160,7 @@ class _NotifBodyContent extends StatelessWidget {
     required this.notif,
   }) : super(key: key);
 
-  final User notif;
+  final AlertType notif;
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +204,7 @@ class _TitleAndBody extends StatefulWidget {
     required this.item,
   }) : super(key: key);
 
-  final User item;
+  final AlertType item;
 
   @override
   _TitleAndBodyState createState() => _TitleAndBodyState();
@@ -227,7 +213,7 @@ class _TitleAndBody extends StatefulWidget {
 class _TitleAndBodyState extends State<_TitleAndBody> {
   void _onChanged(bool? val) {
     setState(() {
-      widget.item.completed = val;
+      widget.item.cleared = val;
     });
   }
 
@@ -235,7 +221,7 @@ class _TitleAndBodyState extends State<_TitleAndBody> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-        widget.item.body,
+        widget.item.medicationPriority.toString(),
         style: const TextStyle(color: Colors.white),
       ),
     );
@@ -251,7 +237,7 @@ class _TitleAndBodyState extends State<_TitleAndBody> {
 
 class _MyNotificationScreenState extends State<NotificationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late Future<List<User>> _myData;
+  late Future<List<AlertType>> _myData;
   int _counter = 0;
   String? filterString;
 
@@ -286,33 +272,46 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
   }
 
   // Local method of gathering JSON data
-  Future<List<User>> readJson() async {
-    debugPrint(filterString);
-    final String response = await rootBundle.loadString('assets/sample.json');
-    final data = await json.decode(response);
+  Future<List<AlertType>> readJson() async {
+    // debugPrint(filterString);
+    final String response =
+        await rootBundle.loadString('assets/sampleData/alertSample.json');
+    final data = await jsonDecode(response);
     // var responseData = [];
+    debugPrint("DATA: ${data.toString()}");
 
     //Creating a list to store input data;
-    List<User> users = [];
-    for (var singleUser in data) {
-      User user = User(
-          id: singleUser["id"],
-          userId: singleUser["userId"],
-          title: singleUser["title"],
-          body: singleUser["body"]);
+    List<AlertType> alerts = [];
 
+    debugPrint(data.runtimeType.toString());
+
+    for (var singleAlert in data) {
+      debugPrint(singleAlert.toString());
+      debugPrint(singleAlert["id"].toString());
+
+      AlertType alert = AlertType(
+          id: singleAlert["id"],
+          firstName: singleAlert["firstName"],
+          lastName: singleAlert["lastName"],
+          medicationName: singleAlert["medicationName"],
+          medicationPriority: singleAlert["medicationPriority"],
+          timeStamp: DateTime.parse(singleAlert["timeStamp"]));
       //Adding user to the list.
-      if (_matchRegExp(user.title, filterString ?? '')) {
-        users.add(user);
-      }
+      // if (_matchRegExp(user.medicationName, filterString ?? '')) {
+      //   users.add(user);
+      // }
+      alerts.add(alert);
     }
     // setState(() {
     // _myData = users;
     // });
-    return users;
+    for (var u in alerts) {
+      debugPrint(u.firstName);
+    }
+    return alerts;
   }
 
-  Stream<List<User>> users() async* {
+  Stream<List<AlertType>> users() async* {
     debugPrint("Getting data!");
     String url = "https://jsonplaceholder.typicode.com/posts";
     final response = await http.get(Uri.parse(url));
@@ -320,23 +319,23 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
     // var responseData = [];
 
     //Creating a list to store input data;
-    List<User> users = [];
+    List<AlertType> users = [];
     for (var singleUser in responseData) {
-      User user = User(
+      AlertType user = AlertType(
           id: singleUser["id"],
-          userId: singleUser["userId"],
-          title: singleUser["title"],
-          body: singleUser["body"]);
+          firstName: singleUser["firstName"],
+          medicationName: singleUser["medicationName"],
+          medicationPriority: singleUser["medicationPriority"]);
 
       //Adding user to the list.
-      if (_matchRegExp(user.title, filterString ?? '')) {
+      if (_matchRegExp(user.medicationName, filterString ?? '')) {
         users.add(user);
       }
     }
   }
 
   // GET request via http package, what will actually be used
-  Future<List<User>> getRequest() async {
+  Future<List<AlertType>> getRequest() async {
     debugPrint("Getting data!");
     //replace your restFull API here.
     String url = "https://jsonplaceholder.typicode.com/posts";
@@ -346,16 +345,16 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
     // var responseData = [];
 
     //Creating a list to store input data;
-    List<User> users = [];
+    List<AlertType> users = [];
     for (var singleUser in responseData) {
-      User user = User(
+      AlertType user = AlertType(
           id: singleUser["id"],
-          userId: singleUser["userId"],
-          title: singleUser["title"],
-          body: singleUser["body"]);
+          firstName: singleUser["firstName"],
+          medicationName: singleUser["medicationName"],
+          medicationPriority: singleUser["medicationPriority"]);
 
       //Adding user to the list.
-      if (_matchRegExp(user.title, filterString ?? '')) {
+      if (_matchRegExp(user.medicationName, filterString ?? '')) {
         users.add(user);
       }
     }
@@ -371,7 +370,7 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             FutureBuilder(
-              future: getRequest(),
+              future: readJson(),
               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
                   return const Center(
@@ -418,7 +417,7 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(seconds: 2),
                               content: Text(
-                                  'Deleted $index: ${snapshot.data[index].title}')));
+                                  'Deleted $index: ${snapshot.data[index].medicationName}')));
                         },
                         child: _NotifCard(
                           notifList: snapshot.data,
