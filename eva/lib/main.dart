@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:eva/screens/login.dart';
 import 'package:eva/screens/notifications.dart';
 import 'package:eva/screens/userAppSettings.dart';
@@ -6,8 +8,26 @@ import 'package:eva/screens/home.dart';
 import 'package:eva/screens/alerts.dart';
 import 'package:eva/screens/reports.dart';
 
+import 'package:http/http.dart' as http;
+
 void main() {
   runApp(const MyApp());
+}
+
+class User {
+  final int id;
+  final int userId;
+  final String title;
+  final String body;
+
+  bool? completed;
+
+  User(
+      {this.id = 0,
+      this.userId = 0,
+      this.title = '',
+      this.body = '',
+      this.completed = false});
 }
 
 class MyApp extends StatelessWidget {
@@ -38,7 +58,7 @@ class MyApp extends StatelessWidget {
           );
         },
         '/home': (BuildContext context) {
-          return const Navigation(title: 'Elderly Virtual Assistant');
+          return const Navigation();
         },
         '/settings': (BuildContext context) {
           return const UserSettings();
@@ -49,7 +69,9 @@ class MyApp extends StatelessWidget {
 }
 
 class Navigation extends StatefulWidget {
-  const Navigation({super.key, required this.title});
+  const Navigation({
+    super.key,
+  });
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -60,8 +82,6 @@ class Navigation extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
   State<Navigation> createState() => _NavigationState();
 }
@@ -70,8 +90,12 @@ class _NavigationState extends State<Navigation> {
   // '_' means it's only available in the library, see https://dart.dev/guides/language/language-tour#libraries-and-visibility
   int _counter = 0;
   int _currentPageIndex = 1;
-  String _title = 'Elderly Virtual Assistant';
-  PageController pageController = PageController();
+  final List<String> _titleList = [
+    'Single Reports',
+    'Elderly Virtual Assistant',
+    'Notifications'
+  ];
+  PageController pageController = PageController(initialPage: 1);
 
   void _incrementCounter() {
     setState(() {
@@ -93,6 +117,33 @@ class _NavigationState extends State<Navigation> {
     debugPrint("Opening Tray!");
   }
 
+  // GET request via http package, what will actually be used
+  Future<List<User>> getRequest() async {
+    debugPrint("Getting data!");
+    //replace your restFull API here.
+    String url = "https://jsonplaceholder.typicode.com/posts";
+    final response = await http.get(Uri.parse(url));
+
+    var responseData = json.decode(response.body);
+    // var responseData = [];
+
+    //Creating a list to store input data;
+    List<User> users = [];
+    for (var singleUser in responseData) {
+      User user = User(
+          id: singleUser["id"],
+          userId: singleUser["userId"],
+          title: singleUser["title"],
+          body: singleUser["body"]);
+
+      //Adding user to the list.
+      // if (_matchRegExp(user.title, filterString ?? '')) {
+      //   users.add(user);
+      // }
+    }
+    return users;
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -105,7 +156,7 @@ class _NavigationState extends State<Navigation> {
         appBar: AppBar(
           // Here we take the value from the Navigation object that was created by
           // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
+          title: Text(_titleList[_currentPageIndex]),
           actions: [
             IconButton(
                 onPressed: _openNotifsTray,
