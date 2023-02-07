@@ -70,6 +70,8 @@ class _NavigationState extends State<Navigation> {
   // '_' means it's only available in the library, see https://dart.dev/guides/language/language-tour#libraries-and-visibility
   int _counter = 0;
   int _currentPageIndex = 1;
+  String _title = 'Elderly Virtual Assistant';
+  PageController pageController = PageController();
 
   void _incrementCounter() {
     setState(() {
@@ -100,45 +102,53 @@ class _NavigationState extends State<Navigation> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the Navigation object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-              onPressed: _openNotifsTray,
-              icon: const Icon(Icons.notifications)),
-          IconButton(
-              onPressed: _goToSettingsPage, icon: const Icon(Icons.settings))
-        ],
-      ),
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            _currentPageIndex = index;
-          });
-        },
-        selectedIndex: _currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.file_copy),
-            label: 'Reports',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.notification_add),
-            label: 'Notifications',
-          ),
-        ],
-      ),
-      body: <Widget>[
-        const ReportsScreen(),
-        const HomeScreen(),
-        const NotificationScreen(),
-      ][_currentPageIndex],
-    );
+        appBar: AppBar(
+          // Here we take the value from the Navigation object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+          actions: [
+            IconButton(
+                onPressed: _openNotifsTray,
+                icon: const Icon(Icons.notifications)),
+            IconButton(
+                onPressed: _goToSettingsPage, icon: const Icon(Icons.settings))
+          ],
+        ),
+        bottomNavigationBar: NavigationBar(
+          onDestinationSelected: (int index) {
+            pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 150),
+              curve: Curves
+                  .easeIn, //define the curve and duration of the transition
+            );
+            setState(() {
+              _currentPageIndex = index;
+            });
+          },
+          selectedIndex: _currentPageIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              icon: Icon(Icons.file_copy),
+              label: 'Reports',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.notification_add),
+              label: 'Notifications',
+            ),
+          ],
+        ),
+        body: PageView(
+          controller: pageController,
+          children: const <Widget>[
+            ReportsScreen(),
+            HomeScreen(),
+            NotificationScreen(),
+          ],
+        ));
   }
 }

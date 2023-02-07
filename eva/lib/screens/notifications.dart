@@ -33,15 +33,15 @@ class User {
       this.completed = false});
 }
 
-class _TodoCard extends StatelessWidget {
+class _NotifCard extends StatelessWidget {
   /// {@macro todo_card}
-  const _TodoCard({
+  const _NotifCard({
     Key? key,
     required this.index,
-    required this.todo,
+    required this.notifList,
   }) : super(key: key);
 
-  final List<User> todo;
+  final List<User> notifList;
   final int index;
 
   @override
@@ -49,11 +49,11 @@ class _TodoCard extends StatelessWidget {
     return GestureDetector(
         onTap: () {
           debugPrint("$index");
-          debugPrint(todo[index].id.toString());
+          debugPrint(notifList[index].id.toString());
           Navigator.of(context).push(
             HeroDialogRoute(
               builder: (context) => Center(
-                child: _TodoPopupCard(todo: todo[index]),
+                child: _NotifPopupCard(notif: notifList[index]),
               ),
             ),
           );
@@ -62,7 +62,7 @@ class _TodoCard extends StatelessWidget {
           createRectTween: (begin, end) {
             return CustomRectTween(begin: begin, end: end);
           },
-          tag: todo[index].id,
+          tag: notifList[index].id,
           child: Card(
             color: Colors.red,
             clipBehavior: Clip.hardEdge,
@@ -91,13 +91,13 @@ class _TodoCard extends StatelessWidget {
                           ),
                           onPressed: () {
                             debugPrint("Deleting $index");
-                            todo.removeAt(index);
+                            notifList.removeAt(index);
                           })),
                   // leading: const Icon(Icons.copy_sharp),
                   title: Transform.translate(
                     offset: const Offset(-4, 0),
                     child: Text(
-                      todo[index].title,
+                      notifList[index].title,
                       style: const TextStyle(color: Colors.white),
                     ),
                   )
@@ -109,9 +109,8 @@ class _TodoCard extends StatelessWidget {
   }
 }
 
-class _TodoTitle extends StatelessWidget {
-  /// {@macro todo_title}
-  const _TodoTitle({
+class _NotifTitle extends StatelessWidget {
+  const _NotifTitle({
     Key? key,
     required this.title,
   }) : super(key: key);
@@ -128,19 +127,14 @@ class _TodoTitle extends StatelessWidget {
   }
 }
 
-/// {@template todo_popup_card}
-/// Popup card to expand the content of a [Todo] card.
-///
-/// Activated from [_TodoCard].
-/// {@endtemplate}
-class _TodoPopupCard extends StatelessWidget {
-  const _TodoPopupCard({Key? key, required this.todo}) : super(key: key);
-  final User todo;
+class _NotifPopupCard extends StatelessWidget {
+  const _NotifPopupCard({Key? key, required this.notif}) : super(key: key);
+  final User notif;
 
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: todo.id,
+      tag: notif.id,
       createRectTween: (begin, end) {
         return CustomRectTween(begin: begin, end: end);
       },
@@ -154,15 +148,15 @@ class _TodoPopupCard extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  _TodoTitle(title: todo.title),
+                  _NotifTitle(title: notif.title),
                   const SizedBox(
                     height: 8,
                   ),
-                  if (todo.body != '') ...[
+                  if (notif.body != '') ...[
                     const Divider(
                       color: Colors.white,
                     ),
-                    _TodoItemsBox(items: todo),
+                    _NotifBodyContent(notif: notif),
                   ],
                 ]),
               ),
@@ -174,29 +168,19 @@ class _TodoPopupCard extends StatelessWidget {
   }
 }
 
-/// {@template todo_items_box}
-/// Box containing the list of a [Todo]'s items.
-///
-/// These items can be checked.
-/// {@endtemplate}
-class _TodoItemsBox extends StatelessWidget {
-  /// {@macro todo_items_box}
-  const _TodoItemsBox({
+class _NotifBodyContent extends StatelessWidget {
+  const _NotifBodyContent({
     Key? key,
-    required this.items,
+    required this.notif,
   }) : super(key: key);
 
-  final User items;
-
-  void _onPressed() {
-    debugPrint("Close Button!");
-  }
+  final User notif;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _TodoItemTile(item: items),
+        _TitleAndBody(item: notif),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -204,16 +188,22 @@ class _TodoItemsBox extends StatelessWidget {
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.black)),
-                onPressed: _onPressed,
+                onPressed: () {
+                  debugPrint("Close Button!");
+                  Navigator.pop(context);
+                },
                 child: const Text("Close")),
             ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.white)),
-                onPressed: _onPressed,
+                onPressed: () {
+                  debugPrint("Delete Button!");
+                  Navigator.pop(context);
+                },
                 child: const Text(
                   "Delete",
-                  style: TextStyle(color: Colors.red),
+                  style: TextStyle(color: Colors.black),
                 ))
           ],
         )
@@ -222,12 +212,8 @@ class _TodoItemsBox extends StatelessWidget {
   }
 }
 
-/// {@template todo_item_template}
-/// An individual [Todo] [Item] with its [Checkbox].
-/// {@endtemplate}
-class _TodoItemTile extends StatefulWidget {
-  /// {@macro todo_item_template}
-  const _TodoItemTile({
+class _TitleAndBody extends StatefulWidget {
+  const _TitleAndBody({
     Key? key,
     required this.item,
   }) : super(key: key);
@@ -235,10 +221,10 @@ class _TodoItemTile extends StatefulWidget {
   final User item;
 
   @override
-  _TodoItemTileState createState() => _TodoItemTileState();
+  _TitleAndBodyState createState() => _TitleAndBodyState();
 }
 
-class _TodoItemTileState extends State<_TodoItemTile> {
+class _TitleAndBodyState extends State<_TitleAndBody> {
   void _onChanged(bool? val) {
     setState(() {
       widget.item.completed = val;
@@ -255,6 +241,13 @@ class _TodoItemTileState extends State<_TodoItemTile> {
     );
   }
 }
+
+// class _ConfirmDelete extends StatefulWidget {
+//   const _ConfirmDelete({
+//     required Key key,
+//   })
+
+// }
 
 class _MyNotificationScreenState extends State<NotificationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -373,67 +366,71 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(children: <Widget>[
-        FutureBuilder(
-          future: getRequest(),
-          builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-            if (snapshot.data == null) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.data.length == 0) {
-              return Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(32),
-                    child: Image(
-                        image: AssetImage('assets/evaFace4HomeRedSad.png')),
-                  ),
-                  Text("No data to show!")
-                ],
-              ));
-            } else {
-              return Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ListView.builder(
-                  // scrollDirection: Axis.vertical,
-                  // shrinkWrap: true,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) => Dismissible(
-                    direction: DismissDirection.startToEnd,
-                    key: ValueKey<int>(index),
-                    onDismissed: (direction) {
-                      if (direction == DismissDirection.endToStart) {
-                        Navigator.of(context).push(
-                          HeroDialogRoute(
-                            builder: (context) => Center(
-                              child: _TodoPopupCard(todo: snapshot.data[index]),
-                            ),
-                          ),
-                        );
-                      }
-                      // setState(() {
-                      //   _myData.removeAt(index);
-                      // });
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          duration: const Duration(seconds: 2),
-                          content: Text(
-                              'Deleted $index: ${snapshot.data[index].title}')));
-                    },
-                    child: _TodoCard(
-                      todo: snapshot.data,
-                      index: index,
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            FutureBuilder(
+              future: getRequest(),
+              builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.data.length == 0) {
+                  return Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.all(32),
+                        child: Image(
+                            image: AssetImage('assets/evaFace4HomeRed.png')),
+                      ),
+                      Text("No new notifications!")
+                    ],
+                  ));
+                } else {
+                  return Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      // shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) => Dismissible(
+                        direction: DismissDirection.startToEnd,
+                        key: ValueKey<int>(index),
+                        onDismissed: (direction) {
+                          if (direction == DismissDirection.endToStart) {
+                            Navigator.of(context).push(
+                              HeroDialogRoute(
+                                builder: (context) => Center(
+                                  child: _NotifPopupCard(
+                                      notif: snapshot.data[index]),
+                                ),
+                              ),
+                            );
+                          }
+                          // setState(() {
+                          //   _myData.removeAt(index);
+                          // });
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              duration: const Duration(seconds: 2),
+                              content: Text(
+                                  'Deleted $index: ${snapshot.data[index].title}')));
+                        },
+                        child: _NotifCard(
+                          notifList: snapshot.data,
+                          index: index,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ));
-            }
-          },
-        ),
-      ]),
+                  ));
+                }
+              },
+            ),
+          ]),
     );
   }
 }
