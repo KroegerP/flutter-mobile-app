@@ -21,6 +21,7 @@ class UserType {
   final double percentTaken;
   DateTime? timeStamp;
   late final String token;
+  late final String mobileUserName;
 }
 
 class MedicationType {
@@ -59,14 +60,18 @@ class ReportType {
       this.medicationPriority = -1,
       this.medicationName = '',
       this.firstName = '',
-      this.lastName = ''});
+      this.lastName = '',
+      this.chartUrl = '',
+      percentMissedWeek = 0});
 
   final int id;
   final int medicationPriority;
   final String medicationName;
   final String firstName;
   final String lastName;
+  final String chartUrl;
   late final DateTime timeStamp;
+  late double percentMissedWeek;
 
   bool? cleared;
   bool? alertRead;
