@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eva/utilities/dates.dart';
 import 'package:intl/intl.dart';
 import 'package:eva/classes/data_types.dart';
 import 'package:flutter/material.dart';
@@ -18,18 +19,6 @@ class _MyHomeScreenState extends State<HomeScreen> {
   void _goToReportsPage() {
     debugPrint("Sending to reports page!");
     Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-  }
-
-// TODO: MOVE TO UTILS FUNCTION
-  String _formatDate(DateTime dateObject) {
-    final curDay = DateTime.now();
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String formatted = formatter.format(dateObject);
-    debugPrint(formatted); // something like 2013-04-20
-
-    // final String formattedDate = curDay.weekday
-
-    return formatted;
   }
 
   // Local method of gathering JSON data
@@ -91,7 +80,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                       child: Text(
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20),
-                        "Your Report for ${_formatDate(user.timeStamp ?? DateTime.now())}",
+                        "Your Report for ${formatDate(user.timeStamp ?? DateTime.now())}",
                       )),
                   Text(
                     "${user.firstName} ${user.lastName} has NUMBER medications",
