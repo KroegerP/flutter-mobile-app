@@ -5,26 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+import '../classes/data_types.dart';
+
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
 
   @override
   State<ReportsScreen> createState() => _MyReportsScreenState();
-}
-
-//Creating a class user to store the data;
-class User {
-  final int id;
-  final int userId;
-  final String title;
-  final String body;
-
-  User({
-    this.id = 0,
-    this.userId = 0,
-    this.title = '',
-    this.body = '',
-  });
 }
 
 class _MyReportsScreenState extends State<ReportsScreen> {
@@ -54,23 +41,24 @@ class _MyReportsScreenState extends State<ReportsScreen> {
   }
 
   // Local method of gathering JSON data
-  Future<List<User>> readJson() async {
+  Future<List<AlertType>> readJson() async {
     debugPrint(filterString);
-    final String response = await rootBundle.loadString('assets/sample.json');
+    final String response =
+        await rootBundle.loadString('assets/sampleData/alertSample.json');
     final data = await json.decode(response);
     // var responseData = [];
 
     //Creating a list to store input data;
-    List<User> users = [];
+    List<AlertType> users = [];
     for (var singleUser in data) {
-      User user = User(
+      AlertType user = AlertType(
           id: singleUser["id"],
-          userId: singleUser["userId"],
-          title: singleUser["title"],
-          body: singleUser["body"]);
+          firstName: singleUser["firstName"],
+          medicationName: singleUser["medicationName"],
+          lastName: singleUser["lastName"]);
 
       //Adding user to the list.
-      if (_matchRegExp(user.title, filterString ?? '')) {
+      if (_matchRegExp(user.medicationName, filterString ?? '')) {
         users.add(user);
       }
     }
@@ -78,31 +66,31 @@ class _MyReportsScreenState extends State<ReportsScreen> {
   }
 
   // GET request via http package, what will actually be used
-  Future<List<User>> getRequest() async {
-    debugPrint("Getting data!");
-    //replace your restFull API here.
-    String url = "https://jsonplaceholder.typicode.com/posts";
-    final response = await http.get(Uri.parse(url));
+  // Future<List<AlertType>> getRequest() async {
+  //   debugPrint("Getting data!");
+  //   //replace your restFull API here.
+  //   String url = "https://jsonplaceholder.typicode.com/posts";
+  //   final response = await http.get(Uri.parse(url));
 
-    var responseData = json.decode(response.body);
-    // var responseData = [];
+  //   var responseData = json.decode(response.body);
+  //   // var responseData = [];
 
-    //Creating a list to store input data;
-    List<User> users = [];
-    for (var singleUser in responseData) {
-      User user = User(
-          id: singleUser["id"],
-          userId: singleUser["userId"],
-          title: singleUser["title"],
-          body: singleUser["body"]);
+  //   //Creating a list to store input data;
+  //   List<AlertType> users = [];
+  //   for (var singleUser in responseData) {
+  //     AlertType user = AlertType(
+  //         id: singleUser["id"],
+  //         firstName: singleUser["firstName"],
+  //         medicationName: singleUser["medicationName"],
+  //         body: singleUser["body"]);
 
-      //Adding user to the list.
-      if (_matchRegExp(user.title, filterString ?? '')) {
-        users.add(user);
-      }
-    }
-    return users;
-  }
+  //     //Adding user to the list.
+  //     if (_matchRegExp(user.medicationName, filterString ?? '')) {
+  //       users.add(user);
+  //     }
+  //   }
+  //   return users;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +99,6 @@ class _MyReportsScreenState extends State<ReportsScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           readJson();
-          getRequest();
         },
         tooltip: 'Refresh Reports Data',
         label: const Text("Get Reports"),
@@ -135,7 +122,6 @@ class _MyReportsScreenState extends State<ReportsScreen> {
                     filterString = value;
                   });
                   readJson();
-                  getRequest();
                 },
               ),
             )),
@@ -196,8 +182,8 @@ class _MyReportsScreenState extends State<ReportsScreen> {
                             ),
                           ),
                           // leading: const Icon(Icons.copy_sharp),
-                          title: Text(snapshot.data[index].title),
-                          subtitle: Text(snapshot.data[index].body),
+                          title: Text(snapshot.data[index].medicationName),
+                          subtitle: Text(snapshot.data[index].lastName),
                           contentPadding: const EdgeInsets.only(bottom: 20.0),
                         ),
                       ),
