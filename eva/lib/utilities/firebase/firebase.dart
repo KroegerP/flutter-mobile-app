@@ -1,12 +1,43 @@
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseConnection {
-  late final fcmToken = getToken();
+  // late final String fcmToken = await getToken();
+  final FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  Future<String?> getToken() {
-    return FirebaseMessaging.instance.getToken();
+  // FirebaseConnection({this.fcmToken}) {
+  //   fcmToken = getToken() ?? '';
+  // }
+
+  Future<NotificationSettings> getSettings() async {
+    var settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    if (kDebugMode) {
+      print('User granted permission: ${settings.authorizationStatus}');
+    }
+    return settings;
+  }
+
+  Future<String?> getToken() async {
+    if (kDebugMode) {
+      print('Web platform? $kIsWeb');
+    }
+    if (kIsWeb) {
+      return await FirebaseMessaging.instance.getToken(
+          vapidKey:
+              "BGX2kch3adNm9yS8nSYJajdBcfrBOZa7HBWXAUJFgAWd1trham-gEp8RaqsVeCiRrH91GpVL-NR3qA0w3GuCboY");
+    }
+    return await FirebaseMessaging.instance.getToken();
   }
 
   void subscribeToRefresh() {

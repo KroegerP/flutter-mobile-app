@@ -1,17 +1,18 @@
 import 'dart:convert';
 
-import 'package:eva/screens/login.dart';
-import 'package:eva/screens/notifications.dart';
-import 'package:eva/screens/userAppSettings.dart';
+import 'package:eva/screens/login/login.dart';
+import 'package:eva/screens/notifications/notifications.dart';
+import 'package:eva/screens/settings/settings.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:eva/screens/home.dart';
+import 'package:eva/screens/home/home.dart';
 import 'package:eva/screens/alerts.dart';
-import 'package:eva/screens/reports.dart';
+import 'package:eva/screens/reports/reports.dart';
 
 import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const MyApp());
+  runApp(const AppWrapper());
 }
 
 class User {
@@ -30,8 +31,8 @@ class User {
       this.completed = false});
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AppWrapper extends StatelessWidget {
+  const AppWrapper({super.key});
 
   // This widget is the root of your application.
   @override

@@ -18,7 +18,7 @@ class UserType {
   final int numMedications;
   final int numNotTaken;
   final int numHighPriority;
-  final double percentTaken;
+  final num percentTaken;
   DateTime? timeStamp;
   late final String token;
   late final String mobileUserName;
