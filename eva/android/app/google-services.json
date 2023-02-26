@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "471507208434",
+    "project_id": "elderly-virtual-assistant-2",
+    "storage_bucket": "elderly-virtual-assistant-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471507208434:android:3718d063d2de7eb2f9286b",
+        "android_client_info": {
+          "package_name": "com.elderlyvirtualassistant.eva"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "471507208434-p435075u2fcb91sldha9gc9mjkb9ono7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLHmWb7LSu8_L_wMsdzfIHK_wH7pOH3bM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471507208434-p435075u2fcb91sldha9gc9mjkb9ono7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
