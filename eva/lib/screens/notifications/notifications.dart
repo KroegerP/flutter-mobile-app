@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:eva/classes/data_types.dart';
-import 'package:eva/screens/individualReports.dart';
+import 'package:eva/screens/reports/individualReports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
-import '../utilities/cutomRectTween.dart';
-import '../utilities/heroDialogueRoute.dart';
-import '../utilities/styles.dart';
+import '../../utilities/cutomRectTween.dart';
+import '../../utilities/heroDialogueRoute.dart';
+import '../../utilities/styles.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});

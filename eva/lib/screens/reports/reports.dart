@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:eva/screens/individualReports.dart';
+import 'package:eva/screens/reports/individualReports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
-import '../classes/data_types.dart';
+import '../../classes/data_types.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
