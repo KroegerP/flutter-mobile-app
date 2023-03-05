@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:eva/utilities/dates.dart';
-import 'package:intl/intl.dart';
+import 'package:eva/utilities/firebase/messager_chat.dart';
 import 'package:eva/classes/data_types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,8 +14,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _MyHomeScreenState extends State<HomeScreen> {
-  UserType _user = UserType();
-
   void _goToReportsPage() {
     debugPrint("Sending to reports page!");
     Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
@@ -23,17 +21,12 @@ class _MyHomeScreenState extends State<HomeScreen> {
 
   // Local method of gathering JSON data
   Future<UserType> readJson() async {
-    // debugPrint(filterString);
     final String response =
         await rootBundle.loadString('assets/sampleData/userInfoSample.json');
     final userInfo = await jsonDecode(response);
-    // var responseData = [];
+
     debugPrint("DATA: ${userInfo.toString()}");
-
-    // debugPrint(userInfo.runtimeType.toString());
-
     debugPrint(userInfo.toString());
-    // debugPrint(userInfo["id"].toString());
 
     UserType user = UserType(
         uuid: userInfo["uuid"] ?? '',
@@ -44,7 +37,9 @@ class _MyHomeScreenState extends State<HomeScreen> {
         numNotTaken: userInfo["numNotTaken"] ?? -1,
         percentTaken: userInfo["percentTaken"] ?? -1,
         timeStamp: DateTime.parse(userInfo["timeStamp"]));
+
     debugPrint("creating user ${userInfo["timeStamp"]}");
+
     return user;
   }
 
@@ -96,6 +91,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                       ),
                       onPressed: _goToReportsPage,
                       child: const Text("Click here to view detailed reports")),
+                  const FcmWidget(),
                 ],
               );
             } else {
