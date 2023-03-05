@@ -1,5 +1,9 @@
-import 'package:eva/main.dart';
+import 'package:eva/classes/data_types.dart';
+import 'package:eva/screens/wrapper.dart';
+import 'package:eva/utilities/firebase/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.title});
@@ -11,31 +15,54 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _MyLoginScreenState extends State<LoginScreen> {
-  String _buttonText = "Login";
+  late String email;
+  late String password;
+  final String _buttonText = "Login";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  int _counter = 0;
 
-  _goToHomeScreen() {
+  String _errorText = '';
+
+  final AuthService _auth = AuthService();
+
+  _goToHomeScreen() async {
     if (_formKey.currentState!.validate()) {
-      _buttonText == "Hello" ? _buttonText = "Goodbye" : _buttonText = "Hello";
-      // Process data.
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
-    }
-  }
+      _formKey.currentState!.save();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+      print(email);
+      print(password);
+      // Process data.
+      UserCredential? result =
+          await _auth.signIn(email = email, password = password);
+
+      if (result == null) {
+        print('Error');
+        setState(() {
+          _errorText = "Unable to Authenticate!";
+        });
+
+        // await _auth.signInAnon();
+
+        print("Signing in as anonymous user");
+        // Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+      } else {
+        print('Success logging in ${result.user?.email}!');
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Wrapper()),
+            (_) => false);
+
+        // Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+      }
+      print(result);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserType?>(context);
+
+    print(user?.uuid);
+
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -82,6 +109,9 @@ class _MyLoginScreenState extends State<LoginScreen> {
                           }
                           return null;
                         },
+                        onSaved: (value) {
+                          email = value.toString();
+                        },
                       ),
                       const Padding(
                         padding: EdgeInsets.only(top: 24),
@@ -99,14 +129,18 @@ class _MyLoginScreenState extends State<LoginScreen> {
                           }
                           return null;
                         },
+                        onSaved: (value) {
+                          password = value.toString();
+                        },
                         onFieldSubmitted: (value) {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             //               var result = await auth.sendPasswordResetEmail(_email);
                             //               print(result);
                             // print(_email);
-                            Navigator.of(context)
-                                .pushNamedAndRemoveUntil('/home', (_) => false);
+                            // Navigator.of(context)
+                            //     .pushNamedAndRemoveUntil('/home', (_) => false);
+                            print(value);
                           }
                         },
                       ),
@@ -116,9 +150,6 @@ class _MyLoginScreenState extends State<LoginScreen> {
                             onPressed: _goToHomeScreen,
                             child: Text.rich(TextSpan(text: _buttonText))),
                       )
-                      //         TextButton(
-                      //             onPressed: _goToHomeScreen,
-                      //             child: const Text("LOGIN")))
                     ],
                   ),
                 ))));
