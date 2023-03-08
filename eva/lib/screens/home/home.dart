@@ -91,7 +91,6 @@ class _MyHomeScreenState extends State<HomeScreen> {
                       ),
                       onPressed: _goToReportsPage,
                       child: const Text("Click here to view detailed reports")),
-                  const FcmWidget(),
                 ],
               );
             } else {
