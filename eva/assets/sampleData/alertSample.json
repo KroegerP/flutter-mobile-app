@@ -2,49 +2,41 @@
     {
           "id": 1,
           "firstName": "firstName",
-          "lastName": "lastName",
-          "medicationName": "medicationName",
+          "lastName": "Ibuprofen is a nonsteroidal anti-inflammatory drug (NSAID). It works by reducing hormones that cause inflammation and pain in the body.",
+          "medicationName": "Ibuprofen",
           "medicationPriority": 1,
           "timeStamp": "2023-02-07T00:00:00+00:00"
       },
       {
             "id": 2,
             "firstName": "Peter",
-            "lastName": "K",
-            "medicationName": "12",
+            "lastName": "Ciprofloxacin is a fluoroquinolone (flor-o-KWIN-o-lone) antibiotic, it is used to treat different types of bacterial infections",
+            "medicationName": "Ciprofloxacin",
             "medicationPriority": 1,
             "timeStamp": "2023-02-07T00:00:00+00:00"
       },
       {
             "id": 3,
             "firstName": "Peter",
-            "lastName": "K",
-            "medicationName": "12",
+            "lastName": "Rosuvastatin (Crestor, Ezallor Sprinkle) is a prescription medication used to treat high cholesterol and prevent heart attacks and strokes.",
+            "medicationName": "Rosuvastatin",
             "medicationPriority": 1,
             "timeStamp": "2023-02-07T00:00:00+00:00"
       },
       {
             "id": 4,
             "firstName": "Peter",
-            "lastName": "K",
-            "medicationName": "12",
+            "lastName": "Metronidazole is an antibiotic that is used to treat bacterial infections of the vagina, stomach, liver, skin, joints, brain and spinal cord, lungs, heart, or bloodstream.",
+            "medicationName": "metroNIDAZOLE",
             "medicationPriority": 1,
             "timeStamp": "2023-02-07T00:00:00+00:00"
       },
       {
             "id": 5,
             "firstName": "Peter",
-            "lastName": "K",
-            "medicationName": "12",
+            "lastName": "Tamsulosin belongs to a class of medications called alpha blockers. It works by relaxing the muscles in the prostate and bladder so that urine can flow easily.",
+            "medicationName": "Tamsulosin",
             "medicationPriority": 1,
             "timeStamp": "2023-02-07T00:00:00+00:00"
-      },
-      {
-            "id": 6,
-            "firstName": "Peter",
-            "lastName": "K",
-            "medicationName": "12",
-            "medicationPriority": 1,
-            "timeStamp": "2023-02-07T00:00:00+00:00"
-      }     
+      }
 ]

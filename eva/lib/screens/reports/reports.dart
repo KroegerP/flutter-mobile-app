@@ -151,7 +151,7 @@ class _MyReportsScreenState extends State<ReportsScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => IndividualReport(
-                                        reportId: index.toString(),
+                                        reportId: snapshot.data[index],
                                       )));
                         },
                         child: ListTile(
