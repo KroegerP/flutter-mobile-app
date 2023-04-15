@@ -1,20 +1,8 @@
-import 'dart:convert';
-
-import 'package:eva/screens/login/login.dart';
 import 'package:eva/screens/notifications/notifications.dart';
-import 'package:eva/screens/settings/settings.dart';
 import 'package:eva/utilities/firebase/auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:eva/screens/home/home.dart';
-import 'package:eva/screens/alerts.dart';
 import 'package:eva/screens/reports/reports.dart';
-
-import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-
-import 'classes/data_types.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({
@@ -43,37 +31,6 @@ class _NavigationState extends State<Navigation> {
   void _openNotifsTray() {
     debugPrint("Opening Tray!");
     _auth.signOut();
-  }
-
-  // GET request via http package, what will actually be used
-  Future<List<UserType>> getRequest() async {
-    debugPrint("Getting data!");
-    //replace your restFull API here.
-    String url = "https://jsonplaceholder.typicode.com/posts";
-    final response = await http.get(Uri.parse(url));
-
-    var responseData = json.decode(response.body);
-    // var responseData = [];
-
-    //Creating a list to store input data;
-    List<UserType> users = [];
-    for (var userInfo in responseData) {
-      UserType user = UserType(
-          uuid: userInfo["uuid"] ?? '',
-          firstName: userInfo["firstName"] ?? '',
-          lastName: userInfo["lastName"] ?? '',
-          numMedications: userInfo["numMedications"] ?? -1,
-          numHighPriority: userInfo["numHighPriority"] ?? -1,
-          numNotTaken: userInfo["numNotTaken"] ?? -1,
-          percentTaken: userInfo["percentTaken"] ?? -1,
-          timeStamp: DateTime.parse(userInfo["timeStamp"]));
-
-      //Adding user to the list.
-      // if (_matchRegExp(user.title, filterString ?? '')) {
-      //   users.add(user);
-      // }
-    }
-    return users;
   }
 
   @override

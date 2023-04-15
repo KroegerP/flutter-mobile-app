@@ -1,5 +1,6 @@
 import 'package:eva/classes/data_types.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthService {
   // _ indicates that it's private - can only be used here
@@ -22,7 +23,7 @@ class AuthService {
       UserCredential anonResult = await _auth.signInAnonymously();
       return anonResult;
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -33,7 +34,7 @@ class AuthService {
           email: userEmail, password: userPassword);
       return userResult;
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }
@@ -42,7 +43,7 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       return null;
     }
   }

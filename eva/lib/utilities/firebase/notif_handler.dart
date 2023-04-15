@@ -28,7 +28,7 @@ class NotificationHandler {
 
   Future<String> getToken() async {
     if (kDebugMode) {
-      print('Web platform? $kIsWeb');
+      debugPrint('Web platform? $kIsWeb');
     }
     if (kIsWeb) {
       return await _firebaseMessaging.getToken(
@@ -49,18 +49,20 @@ class NotificationHandler {
 
   void _configureFirebaseListeners() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
+      debugPrint('Got a message whilst in the foreground!');
+      debugPrint('Message data: ${message.data}');
       if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+        debugPrint(
+            'Message also contained a notification: ${message.notification}');
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
-      print('Message data: ${message.data}');
+      debugPrint('A new onMessageOpenedApp event was published!');
+      debugPrint('Message data: ${message.data}');
       if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+        debugPrint(
+            'Message also contained a notification: ${message.notification}');
       }
     });
 
@@ -69,11 +71,11 @@ class NotificationHandler {
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Handling a background message: ${message.messageId}');
-  print('Printing Data: ${message.data}');
+  debugPrint('Handling a background message: ${message.messageId}');
+  debugPrint('Printing Data: ${message.data}');
 
   final notification = message.notification;
-  print('NOTIF: ${notification}');
+  debugPrint('NOTIF: $notification');
   // ignore: prefer_const_declarations
   final android = const AndroidNotificationDetails('channel_id', 'channel_name',
       priority: Priority.high, importance: Importance.max);

@@ -13,9 +13,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _MyHomeScreenState extends State<HomeScreen> {
-  void _goToReportsPage() {
+  void _goToReportsPage() async {
     debugPrint("Sending to reports page!");
-    Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+    await Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
   }
 
   // Local method of gathering JSON data
@@ -63,11 +63,10 @@ class _MyHomeScreenState extends State<HomeScreen> {
                     child: Align(
                       alignment: Alignment.center,
                       child: Image(
-                        image: AssetImage(
-                            'assets/chart.png'), //TODO: pull image from pi
+                        image: AssetImage('assets/chart.png'),
                       ),
                     ),
-                  ), // TODO: Make this rich with a identifying title
+                  ),
                   Padding(
                       padding: const EdgeInsets.only(
                           bottom: 16, right: 16, left: 16),
@@ -88,7 +87,9 @@ class _MyHomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.all(16.0),
                         textStyle: const TextStyle(fontSize: 14),
                       ),
-                      onPressed: _goToReportsPage,
+                      onPressed: () {
+                        _goToReportsPage();
+                      },
                       child: const Text("Click here to view detailed reports")),
                 ],
               );

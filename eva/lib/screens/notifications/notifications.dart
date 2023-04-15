@@ -1,14 +1,12 @@
 import 'dart:convert';
 
 import 'package:eva/classes/data_types.dart';
-import 'package:eva/screens/reports/individualReports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
-import '../../utilities/cutomRectTween.dart';
-import '../../utilities/heroDialogueRoute.dart';
-import '../../utilities/styles.dart';
+import '../../utilities/cutom_rect_tween.dart';
+import '../../utilities/hero_dialogue_route.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -133,7 +131,7 @@ class _NotifPopupCard extends StatelessWidget {
                   const SizedBox(
                     height: 8,
                   ),
-                  if (notif.medicationPriority != '') ...[
+                  if (notif.medicationPriority < 1) ...[
                     const Divider(
                       color: Colors.white,
                     ),
@@ -206,12 +204,6 @@ class _TitleAndBody extends StatefulWidget {
 }
 
 class _TitleAndBodyState extends State<_TitleAndBody> {
-  void _onChanged(bool? val) {
-    setState(() {
-      widget.item.cleared = val;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -231,18 +223,12 @@ class _TitleAndBodyState extends State<_TitleAndBody> {
 // }
 
 class _MyNotificationScreenState extends State<NotificationScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late Future<List<AlertType>> _myData;
   String? filterString;
 
   // @override
   // void initState() {
   //   _myData = getRequest();
   // }
-
-  void _removeNotification(int index) {
-    print(index);
-  }
 
   bool _matchRegExp(String strToTest, String? regString) {
     if (regString != null) {

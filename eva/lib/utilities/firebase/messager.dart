@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class MyFirebaseMessaging extends StatefulWidget {
+  const MyFirebaseMessaging({super.key});
+
   @override
   State<MyFirebaseMessaging> createState() => _MyFirebaseMessager();
 }
@@ -47,8 +49,6 @@ class _MyFirebaseMessager extends State<MyFirebaseMessaging> {
 
   void subscribeToRefresh() {
     return FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
-      // TODO: If necessary send token to application server.
-
       // Note: This callback is fired at each app startup and whenever a new
       // token is generated.
     }).onError((err) {
@@ -59,7 +59,6 @@ class _MyFirebaseMessager extends State<MyFirebaseMessaging> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     throw UnimplementedError();
   }
 }

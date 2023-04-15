@@ -1,17 +1,11 @@
-import 'dart:convert';
-
 import 'package:eva/screens/login/login.dart';
 import 'package:eva/screens/notifications/notifications.dart';
 import 'package:eva/screens/settings/settings.dart';
 import 'package:eva/utilities/firebase/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:eva/screens/home/home.dart';
-import 'package:eva/screens/alerts.dart';
 import 'package:eva/screens/reports/reports.dart';
-
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import 'classes/data_types.dart';
@@ -83,8 +77,6 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
-  // '_' means it's only available in the library, see https://dart.dev/guides/language/language-tour#libraries-and-visibility
-  int _counter = 0;
   int _currentPageIndex = 1;
   final List<String> _titleList = [
     'Single Reports',
@@ -94,17 +86,6 @@ class _NavigationState extends State<Navigation> {
   PageController pageController = PageController(initialPage: 1);
 
   final AuthService _auth = AuthService();
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   void _goToSettingsPage() {
     debugPrint("Opening Settings Page!");
@@ -120,30 +101,30 @@ class _NavigationState extends State<Navigation> {
   Future<List<UserType>> getRequest() async {
     debugPrint("Getting data!");
     //replace your restFull API here.
-    String url = "https://jsonplaceholder.typicode.com/posts";
-    final response = await http.get(Uri.parse(url));
+    // String url = "https://jsonplaceholder.typicode.com/posts";
+    // final response = await http.get(Uri.parse(url));
 
-    var responseData = json.decode(response.body);
+    // var responseData = json.decode(response.body);
     // var responseData = [];
 
     //Creating a list to store input data;
     List<UserType> users = [];
-    for (var userInfo in responseData) {
-      UserType user = UserType(
-          uuid: userInfo["uuid"] ?? '',
-          firstName: userInfo["firstName"] ?? '',
-          lastName: userInfo["lastName"] ?? '',
-          numMedications: userInfo["numMedications"] ?? -1,
-          numHighPriority: userInfo["numHighPriority"] ?? -1,
-          numNotTaken: userInfo["numNotTaken"] ?? -1,
-          percentTaken: userInfo["percentTaken"] ?? -1,
-          timeStamp: DateTime.parse(userInfo["timeStamp"]));
+    // for (var userInfo in responseData) {
+    //   UserType user = UserType(
+    //       uuid: userInfo["uuid"] ?? '',
+    //       firstName: userInfo["firstName"] ?? '',
+    //       lastName: userInfo["lastName"] ?? '',
+    //       numMedications: userInfo["numMedications"] ?? -1,
+    //       numHighPriority: userInfo["numHighPriority"] ?? -1,
+    //       numNotTaken: userInfo["numNotTaken"] ?? -1,
+    //       percentTaken: userInfo["percentTaken"] ?? -1,
+    //       timeStamp: DateTime.parse(userInfo["timeStamp"]));
 
-      //Adding user to the list.
-      // if (_matchRegExp(user.title, filterString ?? '')) {
-      //   users.add(user);
-      // }
-    }
+    //   //Adding user to the list.
+    //   // if (_matchRegExp(user.title, filterString ?? '')) {
+    //   //   users.add(user);
+    //   // }
+    // }
     return users;
   }
 

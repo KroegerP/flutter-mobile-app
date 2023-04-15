@@ -31,11 +31,10 @@ class _IndividualReportState extends State<IndividualReport> {
             child: Align(
               alignment: Alignment.center,
               child: Image(
-                image:
-                    AssetImage('assets/chart.png'), //TODO: pull image from pi
+                image: AssetImage('assets/chart.png'),
               ),
             ),
-          ), // TODO: Make this rich with a identifying title
+          ),
           Padding(
               padding: const EdgeInsets.only(bottom: 16, right: 16, left: 16),
               child: Text(

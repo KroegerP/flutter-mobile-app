@@ -28,32 +28,31 @@ class _MyLoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      print(email);
-      print(password);
       // Process data.
       UserCredential? result =
           await _auth.signIn(email = email, password = password);
 
       if (result == null) {
-        print('Error');
+        debugPrint('Error');
         setState(() {
           _errorText = "Unable to Authenticate!";
         });
 
         // await _auth.signInAnon();
 
-        print("Signing in as anonymous user");
+        debugPrint("Signing in as anonymous user");
         // Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
       } else {
-        print('Success logging in ${result.user?.email}!');
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const Wrapper()),
-            (_) => false);
-
+        debugPrint('Success logging in ${result.user?.email}!');
+        if (context.mounted) {
+          await Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const Wrapper()),
+              (_) => false);
+        }
         // Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
       }
-      print(result);
+      // print(result);
     }
   }
 
@@ -61,7 +60,7 @@ class _MyLoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserType?>(context);
 
-    print(user?.uuid);
+    debugPrint(user?.uuid);
 
     return Scaffold(
         appBar: AppBar(
@@ -89,9 +88,9 @@ class _MyLoginScreenState extends State<LoginScreen> {
                               color: Colors.red,
                               fontWeight: FontWeight.bold,
                               fontSize: 24))),
-                      const Text.rich(TextSpan(
-                          text: "Please Log In",
-                          style: TextStyle(fontSize: 14))),
+                      Text.rich(TextSpan(
+                          text: _errorText != '' ? _errorText : "Please Log In",
+                          style: const TextStyle(fontSize: 14))),
                       const Padding(
                         padding: EdgeInsets.only(top: 24),
                         child: Text.rich(TextSpan(
@@ -140,14 +139,16 @@ class _MyLoginScreenState extends State<LoginScreen> {
                             // print(_email);
                             // Navigator.of(context)
                             //     .pushNamedAndRemoveUntil('/home', (_) => false);
-                            print(value);
+                            debugPrint(value);
                           }
                         },
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 32),
                         child: ElevatedButton(
-                            onPressed: _goToHomeScreen,
+                            onPressed: () async {
+                              await _goToHomeScreen();
+                            },
                             child: Text.rich(TextSpan(text: _buttonText))),
                       )
                     ],
