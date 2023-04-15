@@ -1,206 +1,101 @@
-import 'dart:convert';
-
-import 'package:eva/screens/login/login.dart';
-import 'package:eva/screens/notifications/notifications.dart';
-import 'package:eva/screens/settings/settings.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:eva/classes/data_types.dart';
+import 'package:eva/firebase_options.dart';
+import 'package:eva/screens/wrapper.dart';
+import 'package:eva/utilities/firebase/auth.dart';
+import 'package:eva/utilities/firebase/notif_handler.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
-import 'package:eva/screens/home/home.dart';
-import 'package:eva/screens/alerts.dart';
-import 'package:eva/screens/reports/reports.dart';
+import 'package:provider/provider.dart';
 
-import 'package:http/http.dart' as http;
+void main() async {
+  debugPrint('Starting!');
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    NotificationHandler notificationHandler = NotificationHandler();
+    await notificationHandler.init();
+    String token = await notificationHandler.getToken();
+    debugPrint('FCM Token: $token');
+  }
 
-void main() {
-  runApp(const AppWrapper());
+  runApp(const MyApp());
 }
 
-class User {
-  final int id;
-  final int userId;
-  final String title;
-  final String body;
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
 
-  bool? completed;
+//   @override
+//   Widget build(BuildContext context) {
+//     final user = Provider.of<UserType>(context);
 
-  User(
-      {this.id = 0,
-      this.userId = 0,
-      this.title = '',
-      this.body = '',
-      this.completed = false});
-}
+//     // print("Is user anon? ${user.isAnonymous}");
 
-class AppWrapper extends StatelessWidget {
-  const AppWrapper({super.key});
+//     if (user) {
+//       return const LoginScreen(title: 'Sign In');
+//     } else {
+//       return const HomeScreen();
+//     }
+//   }
+// }
+
+// import 'package:flutter/material.dart';
+// import 'notification_handler.dart'; // Imported from notifHandler.dart
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   NotificationHandler notificationHandler = NotificationHandler();
+//   await notificationHandler.init();
+//   String token = await notificationHandler.getToken();
+//   print('FCM Token: $token');
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     // Build your app UI
+//     return MaterialApp(
+//       home: Scaffold(
+//         appBar: AppBar(
+//           title: Text('My App'),
+//         ),
+//         body: Center(
+//           child: Text('My App'),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'EVAA',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.red,
+    return StreamProvider<UserType?>.value(
+      key: key,
+      initialData: null,
+      value: AuthService().user,
+      child: MaterialApp(
+        title: 'EVAA',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.red,
+        ),
+        // home: const Navigation(title: 'Elderly Virtual Assistant'),
+        home: const Wrapper(),
       ),
-      // home: const Navigation(title: 'Elderly Virtual Assistant'),
-      routes: <String, WidgetBuilder>{
-        '/': (BuildContext context) {
-          return const LoginScreen(
-            title: 'Elderly Virtual Assistant',
-          );
-        },
-        '/home': (BuildContext context) {
-          return const Navigation();
-        },
-        '/settings': (BuildContext context) {
-          return const UserSettings();
-        }
-      },
     );
-  }
-}
-
-class Navigation extends StatefulWidget {
-  const Navigation({
-    super.key,
-  });
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  @override
-  State<Navigation> createState() => _NavigationState();
-}
-
-class _NavigationState extends State<Navigation> {
-  // '_' means it's only available in the library, see https://dart.dev/guides/language/language-tour#libraries-and-visibility
-  int _counter = 0;
-  int _currentPageIndex = 1;
-  final List<String> _titleList = [
-    'Single Reports',
-    'Elderly Virtual Assistant',
-    'Notifications'
-  ];
-  PageController pageController = PageController(initialPage: 1);
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  void _goToSettingsPage() {
-    debugPrint("Opening Settings Page!");
-    Navigator.pushNamed(context, '/settings');
-  }
-
-  void _openNotifsTray() {
-    debugPrint("Opening Tray!");
-  }
-
-  // GET request via http package, what will actually be used
-  Future<List<User>> getRequest() async {
-    debugPrint("Getting data!");
-    //replace your restFull API here.
-    String url = "https://jsonplaceholder.typicode.com/posts";
-    final response = await http.get(Uri.parse(url));
-
-    var responseData = json.decode(response.body);
-    // var responseData = [];
-
-    //Creating a list to store input data;
-    List<User> users = [];
-    for (var singleUser in responseData) {
-      User user = User(
-          id: singleUser["id"],
-          userId: singleUser["userId"],
-          title: singleUser["title"],
-          body: singleUser["body"]);
-
-      //Adding user to the list.
-      // if (_matchRegExp(user.title, filterString ?? '')) {
-      //   users.add(user);
-      // }
-    }
-    return users;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the Navigation object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(_titleList[_currentPageIndex]),
-          actions: [
-            IconButton(
-                onPressed: _openNotifsTray,
-                icon: const Icon(Icons.notifications)),
-            IconButton(
-                onPressed: _goToSettingsPage, icon: const Icon(Icons.settings))
-          ],
-        ),
-        bottomNavigationBar: NavigationBar(
-          onDestinationSelected: (int index) {
-            pageController.animateToPage(
-              index,
-              duration: const Duration(milliseconds: 150),
-              curve: Curves
-                  .easeIn, //define the curve and duration of the transition
-            );
-            setState(() {
-              _currentPageIndex = index;
-            });
-          },
-          selectedIndex: _currentPageIndex,
-          destinations: const <Widget>[
-            NavigationDestination(
-              icon: Icon(Icons.file_copy),
-              label: 'Reports',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.notification_add),
-              label: 'Notifications',
-            ),
-          ],
-        ),
-        body: PageView(
-          controller: pageController,
-          children: const <Widget>[
-            ReportsScreen(),
-            HomeScreen(),
-            NotificationScreen(),
-          ],
-        ));
   }
 }

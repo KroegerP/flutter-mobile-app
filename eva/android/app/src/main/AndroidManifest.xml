@@ -3,7 +3,7 @@
    <application
         android:label="eva"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/eva_mobile">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -30,5 +30,15 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+                See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@mipmap/eva_mobile" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+            notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@android:color/black" />
     </application>
 </manifest>

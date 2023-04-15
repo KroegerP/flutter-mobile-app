@@ -4,16 +4,23 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class FirebaseConnection {
+class MyFirebaseMessaging extends StatefulWidget {
+  const MyFirebaseMessaging({super.key});
+
+  @override
+  State<MyFirebaseMessaging> createState() => _MyFirebaseMessager();
+}
+
+class _MyFirebaseMessager extends State<MyFirebaseMessaging> {
   // late final String fcmToken = await getToken();
-  final FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   // FirebaseConnection({this.fcmToken}) {
   //   fcmToken = getToken() ?? '';
   // }
 
   Future<NotificationSettings> getSettings() async {
-    var settings = await messaging.requestPermission(
+    var settings = await _messaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -42,13 +49,16 @@ class FirebaseConnection {
 
   void subscribeToRefresh() {
     return FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
-      // TODO: If necessary send token to application server.
-
       // Note: This callback is fired at each app startup and whenever a new
       // token is generated.
     }).onError((err) {
       // Error getting token.
       return err;
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
   }
 }

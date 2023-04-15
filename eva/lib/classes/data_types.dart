@@ -9,6 +9,7 @@ class UserType {
     this.numMedications = -1,
     this.numNotTaken = -1,
     this.percentTaken = -1,
+    this.isAnonymous = true,
     DateTime? timeStamp,
   }) : timeStamp = timeStamp ?? DateTime.parse("1969-07-20 20:18:04Z");
 
@@ -22,6 +23,7 @@ class UserType {
   DateTime? timeStamp;
   late final String token;
   late final String mobileUserName;
+  late bool isAnonymous;
 }
 
 class MedicationType {

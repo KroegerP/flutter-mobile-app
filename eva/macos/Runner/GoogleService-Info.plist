@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>471507208434-v19ic84qhv21ash8ahjbch45jdk0u07k.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.471507208434-v19ic84qhv21ash8ahjbch45jdk0u07k</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA4aTO8RA2VxWsuUYyieObsZKwq9qJ77iM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>471507208434</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.eva</string>
+	<key>PROJECT_ID</key>
+	<string>elderly-virtual-assistant-2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>elderly-virtual-assistant-2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:471507208434:ios:4adb392f9e27317bf9286b</string>
+</dict>
+</plist>

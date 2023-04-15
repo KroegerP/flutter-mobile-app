@@ -1,14 +1,12 @@
 import 'dart:convert';
 
 import 'package:eva/classes/data_types.dart';
-import 'package:eva/screens/reports/individualReports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
-import '../../utilities/cutomRectTween.dart';
-import '../../utilities/heroDialogueRoute.dart';
-import '../../utilities/styles.dart';
+import '../../utilities/cutom_rect_tween.dart';
+import '../../utilities/hero_dialogue_route.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -54,11 +52,6 @@ class _NotifCard extends StatelessWidget {
             clipBehavior: Clip.hardEdge,
             child: InkWell(
               splashColor: Colors.blue.withAlpha(30),
-              // onTap: () {
-              //   debugPrint("Ticked");
-              //   // _incrementCounter();
-              //   // debugPrint(index.toString());
-              // },
               child: ListTile(
                   minLeadingWidth: 12,
                   leading: Transform.translate(
@@ -138,7 +131,7 @@ class _NotifPopupCard extends StatelessWidget {
                   const SizedBox(
                     height: 8,
                   ),
-                  if (notif.medicationPriority != '') ...[
+                  if (notif.medicationPriority < 1) ...[
                     const Divider(
                       color: Colors.white,
                     ),
@@ -211,12 +204,6 @@ class _TitleAndBody extends StatefulWidget {
 }
 
 class _TitleAndBodyState extends State<_TitleAndBody> {
-  void _onChanged(bool? val) {
-    setState(() {
-      widget.item.cleared = val;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -236,30 +223,12 @@ class _TitleAndBodyState extends State<_TitleAndBody> {
 // }
 
 class _MyNotificationScreenState extends State<NotificationScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late Future<List<AlertType>> _myData;
-  int _counter = 0;
   String? filterString;
 
   // @override
   // void initState() {
   //   _myData = getRequest();
   // }
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  void _removeNotification(int index) {
-    print(index);
-  }
 
   bool _matchRegExp(String strToTest, String? regString) {
     if (regString != null) {
@@ -273,7 +242,6 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
 
   // Local method of gathering JSON data
   Future<List<AlertType>> readJson() async {
-    // debugPrint(filterString);
     final String response =
         await rootBundle.loadString('assets/sampleData/alertSample.json');
     final data = await jsonDecode(response);
@@ -283,12 +251,7 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
     //Creating a list to store input data;
     List<AlertType> alerts = [];
 
-    debugPrint(data.runtimeType.toString());
-
     for (var singleAlert in data) {
-      debugPrint(singleAlert.toString());
-      debugPrint(singleAlert["id"].toString());
-
       AlertType alert = AlertType(
           id: singleAlert["id"],
           firstName: singleAlert["firstName"],
@@ -305,38 +268,11 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
     // setState(() {
     // _myData = users;
     // });
-    for (var u in alerts) {
-      debugPrint(u.firstName);
-    }
     return alerts;
-  }
-
-  Stream<List<AlertType>> users() async* {
-    debugPrint("Getting data!");
-    String url = "https://jsonplaceholder.typicode.com/posts";
-    final response = await http.get(Uri.parse(url));
-    var responseData = json.decode(response.body);
-    // var responseData = [];
-
-    //Creating a list to store input data;
-    List<AlertType> users = [];
-    for (var singleUser in responseData) {
-      AlertType user = AlertType(
-          id: singleUser["id"],
-          firstName: singleUser["firstName"],
-          medicationName: singleUser["medicationName"],
-          medicationPriority: singleUser["medicationPriority"]);
-
-      //Adding user to the list.
-      if (_matchRegExp(user.medicationName, filterString ?? '')) {
-        users.add(user);
-      }
-    }
   }
 
   // GET request via http package, what will actually be used
   Future<List<AlertType>> getRequest() async {
-    debugPrint("Getting data!");
     //replace your restFull API here.
     String url = "https://jsonplaceholder.typicode.com/posts";
     final response = await http.get(Uri.parse(url));

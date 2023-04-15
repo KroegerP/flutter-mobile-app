@@ -1,8 +1,8 @@
 import 'package:eva/utilities/styles.dart';
 import 'package:flutter/material.dart';
 
-import 'cutomRectTween.dart';
-import 'heroDialogueRoute.dart';
+import 'cutom_rect_tween.dart';
+import 'hero_dialogue_route.dart';
 
 /// {@template add_todo_button}
 /// Button to add a new [Todo].

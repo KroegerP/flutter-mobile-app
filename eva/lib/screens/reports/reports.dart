@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:eva/screens/reports/individualReports.dart';
+import 'package:eva/screens/reports/individual_report.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 
 import '../../classes/data_types.dart';
 
@@ -151,7 +150,7 @@ class _MyReportsScreenState extends State<ReportsScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => IndividualReport(
-                                        reportId: index.toString(),
+                                        reportId: snapshot.data[index],
                                       )));
                         },
                         child: ListTile(
