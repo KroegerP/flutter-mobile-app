@@ -1,20 +1,25 @@
 import 'package:eva/classes/data_types.dart';
-import 'package:eva/screens/home/home.dart';
-import 'package:eva/screens/login/login.dart';
+import 'package:eva/firebase_options.dart';
 import 'package:eva/screens/wrapper.dart';
 import 'package:eva/utilities/firebase/auth.dart';
-import 'package:eva/utilities/firebase/notifHandler.dart';
+import 'package:eva/utilities/firebase/notif_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  debugPrint('Starting!');
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  NotificationHandler notificationHandler = NotificationHandler();
-  await notificationHandler.init();
-  String token = await notificationHandler.getToken();
-  print('FCM Token: $token');
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    NotificationHandler notificationHandler = NotificationHandler();
+    await notificationHandler.init();
+    String token = await notificationHandler.getToken();
+    debugPrint('FCM Token: $token');
+  }
+
   runApp(const MyApp());
 }
 
