@@ -13,13 +13,6 @@ class StorageService {
     return downloadUrl;
   }
 
-  Future<String> downloadFile(File file) async {
-    final uploadTask = storage.ref(_storagePath).putFile(file);
-    final snapshot = await uploadTask.whenComplete(() {});
-    final downloadUrl = await snapshot.ref.getDownloadURL();
-    return downloadUrl;
-  }
-
   Future<void> deleteFile(String downloadUrl) async {
     final ref = storage.refFromURL(downloadUrl);
     await ref.delete();

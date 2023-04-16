@@ -65,7 +65,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.all(16),
                     child: Align(
                       alignment: Alignment.center,
-                      child: ImageWidget(downloadUrl: 'chart.png'),
+                      child: ImageWidget(downloadUrl: 'images/chart.png'),
                     ),
                   ),
                   Padding(

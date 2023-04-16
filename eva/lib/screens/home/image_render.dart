@@ -17,7 +17,8 @@ class ImageWidget extends StatefulWidget {
 }
 
 class _ImageWidgetState extends State<ImageWidget> {
-  late File _imageFile = File('');
+  bool _loading = true;
+  late Uint8List _imageBytes;
 
   @override
   void initState() {
@@ -30,23 +31,18 @@ class _ImageWidgetState extends State<ImageWidget> {
     final downloader = FileDownloader();
     final file = await downloader.downloadFile(widget.downloadUrl);
     setState(() {
-      _imageFile = file;
+      _loading = false;
+      _imageBytes = file;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_imageFile.path.isNotEmpty) {
-      debugPrint('Not Empty!');
-      debugPrint(_imageFile.path);
-      debugPrint(_imageFile.uri.toString());
-    } else {
-      debugPrint('EMPTY');
+    if (_loading) {
+      return const CircularProgressIndicator();
     }
 
-    return _imageFile.path.isNotEmpty
-        ? Image.file(_imageFile)
-        : const CircularProgressIndicator();
+    return Image.memory(_imageBytes);
   }
 }
 
