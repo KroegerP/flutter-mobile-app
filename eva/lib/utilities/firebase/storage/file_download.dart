@@ -15,7 +15,7 @@ class FileDownloader {
           .refFromURL('gs://elderly-virtual-assistant-2.appspot.com');
       final img = await ref.child(downloadUrl).getDownloadURL();
       if (img != null) {
-        final file = await http.get(Uri.parse('$img'));
+        final file = await http.get(Uri.parse(img));
         debugPrint('Status Code: ${file.statusCode}');
         return file.bodyBytes;
       }

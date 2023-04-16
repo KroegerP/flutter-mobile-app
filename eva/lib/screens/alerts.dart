@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class AlertsScreen extends StatefulWidget {
@@ -8,10 +9,43 @@ class AlertsScreen extends StatefulWidget {
 }
 
 class _MyAlertsScreenState extends State<AlertsScreen> {
+  List<Map<String, dynamic>> _notifications = [];
   bool _toggleAlerts = false;
   bool _toggleAlerts2 = false;
   String _buttonText = "Hello";
   double _alertFrequncy = 5;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Retrieve the notifications from the Firebase Realtime Database
+    DatabaseReference reference = FirebaseDatabase.instance.ref(
+        'https://elderly-virtual-assistant-2-default-rtdb.firebaseio.com/');
+    reference
+        .child('notifications')
+        .orderByChild('timestamp')
+        .onValue
+        .listen((event) {
+      List<Map<String, dynamic>> notifications = [];
+      DataSnapshot dataSnapshot = event.snapshot;
+      if (dataSnapshot != null) {
+        Map<dynamic, dynamic> data = Map<String, dynamic>.from(
+            dataSnapshot.value as Map<Object?, Object?>);
+        data.forEach((key, value) {
+          notifications.add(Map<String, dynamic>.from(value));
+        });
+      }
+
+      print('NOTIFICATIONS');
+      print(notifications);
+
+      // Update the UI with the retrieved notifications
+      setState(() {
+        _notifications = notifications;
+      });
+    });
+  }
 
   void _toggleAlertsFunction() {
     setState(() {

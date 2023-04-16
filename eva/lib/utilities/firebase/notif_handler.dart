@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +12,8 @@ class NotificationHandler {
 
   Future<void> init() async {
     _firebaseMessaging = FirebaseMessaging.instance;
+
+    _firebaseMessaging.subscribeToTopic("all");
 
     var androidInfo = await DeviceInfoPlugin().androidInfo;
 
@@ -51,6 +54,15 @@ class NotificationHandler {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       debugPrint('Got a message whilst in the foreground!');
       debugPrint('Message data: ${message.data}');
+
+      DatabaseReference reference = FirebaseDatabase.instance.ref(
+          'https://elderly-virtual-assistant-2-default-rtdb.firebaseio.com/');
+      reference.child('notifications').set({
+        'title': message.notification?.title,
+        'body': message.notification?.body,
+        'timestamp': ServerValue.timestamp,
+      });
+
       if (message.notification != null) {
         debugPrint(
             'Message also contained a notification: ${message.notification}');
@@ -76,6 +88,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   final notification = message.notification;
   debugPrint('NOTIF: $notification');
+
+  DatabaseReference reference = FirebaseDatabase.instance
+      .ref('https://elderly-virtual-assistant-2-default-rtdb.firebaseio.com/');
+  reference.child('notifications').set({
+    'title': message.notification?.title,
+    'body': message.notification?.body,
+    'timestamp': ServerValue.timestamp,
+  });
+
   // ignore: prefer_const_declarations
   final android = const AndroidNotificationDetails('channel_id', 'channel_name',
       priority: Priority.high, importance: Importance.max);
