@@ -139,7 +139,7 @@ class _MyLoginScreenState extends State<LoginScreen> {
                             // print(_email);
                             // Navigator.of(context)
                             //     .pushNamedAndRemoveUntil('/home', (_) => false);
-                            debugPrint(value);
+                            _goToHomeScreen();
                           }
                         },
                       ),
