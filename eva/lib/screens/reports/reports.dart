@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva/screens/reports/individual_report.dart';
+import 'package:eva/utilities/firebase/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,6 +18,7 @@ class ReportsScreen extends StatefulWidget {
 class _MyReportsScreenState extends State<ReportsScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? filterString;
+  FirestoreService userReports = FirestoreService();
 
   bool _matchRegExp(String strToTest, String? regString) {
     if (regString != null) {
@@ -52,31 +55,16 @@ class _MyReportsScreenState extends State<ReportsScreen> {
     return users;
   }
 
-  // GET request via http package, what will actually be used
-  // Future<List<AlertType>> getRequest() async {
-  //   debugPrint("Getting data!");
-  //   //replace your restFull API here.
-  //   String url = "https://jsonplaceholder.typicode.com/posts";
-  //   final response = await http.get(Uri.parse(url));
-
-  //   var responseData = json.decode(response.body);
-  //   // var responseData = [];
-
-  //   //Creating a list to store input data;
-  //   List<AlertType> users = [];
-  //   for (var singleUser in responseData) {
-  //     AlertType user = AlertType(
-  //         id: singleUser["id"],
-  //         firstName: singleUser["firstName"],
-  //         medicationName: singleUser["medicationName"],
-  //         body: singleUser["body"]);
-
-  //     //Adding user to the list.
-  //     if (_matchRegExp(user.medicationName, filterString ?? '')) {
-  //       users.add(user);
-  //     }
+  // Future<List<ReportType>> getReports() async {
+  //   print('Getting report data...');
+  //   final reportData =
+  //       await FirestoreService().getDocumentById('BMzcY66MlmwygVrdDgvh');
+  //   // print(reportData);
+  //   if (reportData != null) {
+  //     return reportData;
   //   }
-  //   return users;
+
+  //   return ReportType();
   // }
 
   @override
@@ -108,12 +96,12 @@ class _MyReportsScreenState extends State<ReportsScreen> {
                   setState(() {
                     filterString = value;
                   });
-                  readJson();
+                  // readJson();
                 },
               ),
             )),
         FutureBuilder(
-          future: readJson(),
+          future: FirestoreService().getDocumentById('BMzcY66MlmwygVrdDgvh'),
           builder: (BuildContext ctx, AsyncSnapshot snapshot) {
             if (snapshot.data == null) {
               return const Center(
@@ -133,6 +121,7 @@ class _MyReportsScreenState extends State<ReportsScreen> {
                 ],
               ));
             } else {
+              print(snapshot.data);
               return Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -169,7 +158,7 @@ class _MyReportsScreenState extends State<ReportsScreen> {
                           ),
                           // leading: const Icon(Icons.copy_sharp),
                           title: Text(snapshot.data[index].medicationName),
-                          subtitle: Text(snapshot.data[index].lastName),
+                          subtitle: Text(snapshot.data[index].medicationName),
                           contentPadding: const EdgeInsets.only(bottom: 20.0),
                         ),
                       ),
