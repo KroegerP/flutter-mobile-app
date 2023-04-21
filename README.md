@@ -1,4 +1,4 @@
-# flutter-mobile-app
+# Everyone's Virtual Assistant (EVA) Mobile
  
 ## Table of Contents
 
