@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "471507208434",
+    "firebase_url": "https://elderly-virtual-assistant-2-default-rtdb.firebaseio.com",
     "project_id": "elderly-virtual-assistant-2",
     "storage_bucket": "elderly-virtual-assistant-2.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "471507208434-p435075u2fcb91sldha9gc9mjkb9ono7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "471507208434-v19ic84qhv21ash8ahjbch45jdk0u07k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eva"
+              }
             }
           ]
         }

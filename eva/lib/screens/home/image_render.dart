@@ -1,12 +1,50 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:eva/screens/home/image_render.dart';
 import 'package:eva/utilities/dates.dart';
 import 'package:eva/classes/data_types.dart';
 import 'package:eva/utilities/firebase/storage/file_download.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+class ImageWidget extends StatefulWidget {
+  final String downloadUrl;
+
+  const ImageWidget({super.key, required this.downloadUrl});
+
+  @override
+  State<ImageWidget> createState() => _ImageWidgetState();
+}
+
+class _ImageWidgetState extends State<ImageWidget> {
+  bool _loading = true;
+  late Uint8List _imageBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    _downloadImage();
+  }
+
+  Future<void> _downloadImage() async {
+    debugPrint('Download Image call: ${widget.downloadUrl}');
+    final downloader = FileDownloader();
+    final file = await downloader.downloadFile(widget.downloadUrl);
+    setState(() {
+      _loading = false;
+      _imageBytes = file;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) {
+      return const CircularProgressIndicator();
+    }
+
+    return Image.memory(_imageBytes);
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -65,7 +103,9 @@ class _MyHomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.all(16),
                     child: Align(
                       alignment: Alignment.center,
-                      child: ImageWidget(downloadUrl: 'images/chart.png'),
+                      child: Image(
+                        image: AssetImage('assets/chart.png'),
+                      ),
                     ),
                   ),
                   Padding(

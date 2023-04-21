@@ -215,20 +215,8 @@ class _TitleAndBodyState extends State<_TitleAndBody> {
   }
 }
 
-// class _ConfirmDelete extends StatefulWidget {
-//   const _ConfirmDelete({
-//     required Key key,
-//   })
-
-// }
-
 class _MyNotificationScreenState extends State<NotificationScreen> {
   String? filterString;
-
-  // @override
-  // void initState() {
-  //   _myData = getRequest();
-  // }
 
   bool _matchRegExp(String strToTest, String? regString) {
     if (regString != null) {
@@ -265,9 +253,6 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
       // }
       alerts.add(alert);
     }
-    // setState(() {
-    // _myData = users;
-    // });
     return alerts;
   }
 
@@ -278,7 +263,6 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
     final response = await http.get(Uri.parse(url));
 
     var responseData = json.decode(response.body);
-    // var responseData = [];
 
     //Creating a list to store input data;
     List<AlertType> users = [];
@@ -347,9 +331,6 @@ class _MyNotificationScreenState extends State<NotificationScreen> {
                               ),
                             );
                           }
-                          // setState(() {
-                          //   _myData.removeAt(index);
-                          // });
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(seconds: 2),
                               content: Text(
